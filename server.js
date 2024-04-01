@@ -3,17 +3,14 @@ const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
 
 const app = express();
-const port = process.env.PORT || 3000; // Usando a porta fornecida pelo ambiente ou 3000 como padrão
+const port = process.env.PORT || 3000;
 
-// Configuração do Body Parser para analisar dados de formulário
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-// Rota para lidar com o envio do formulário
 app.post('/enviar-email', (req, res) => {
   const { nome, telefone, email, empresa, mensagem } = req.body;
 
-  // Configuração do Nodemailer
   const transporter = nodemailer.createTransport({
     service: 'outlook',
     auth: {
@@ -22,7 +19,6 @@ app.post('/enviar-email', (req, res) => {
     }
   });
 
-  // Configuração do e-mail a ser enviado
   const mailOptions = {
     from: 'kauanhen06@outlook.com',
     to: 'kauansjx31@gmail.com',
@@ -36,19 +32,17 @@ app.post('/enviar-email', (req, res) => {
     `
   };
 
-  // Envio do e-mail
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error(error);
+      console.error('Erro ao enviar e-mail:', error); // Imprime detalhes do erro no console
       res.status(500).send('Ocorreu um erro ao enviar o e-mail.');
     } else {
-      console.log('E-mail enviado: ' + info.response);
+      console.log('E-mail enviado com sucesso:', info.response); // Imprime resposta do servidor no console
       res.send('E-mail enviado com sucesso!');
     }
   });
 });
 
-// Inicia o servidor
 app.listen(port, () => {
   console.log(`Servidor iniciado e ouvindo na porta ${port}`);
 });
