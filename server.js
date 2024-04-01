@@ -14,13 +14,13 @@ app.post('/enviar-email', (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'outlook',
     auth: {
-      user: 'kauanhen06@outlook.com',
-      pass: 'Montanha12'
+      user: 'metalgomesinfo@outlook.com',
+      pass: 'metal123@'
     }
   });
 
   const mailOptions = {
-    from: 'kauanhen06@outlook.com',
+    from: 'metalgomesinfo@outlook.com',
     to: 'kauansjx31@gmail.com',
     subject: 'Formulário de Contato',
     html: `
