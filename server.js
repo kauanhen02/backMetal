@@ -25,7 +25,7 @@ app.post('/enviar-email', (req, res) => {
   // Configuração do e-mail a ser enviado
   const mailOptions = {
     from: 'kauanhen06@outlook.com',
-    to: 'email-que-deseja-receber-os-formularios@gmail.com',
+    to: 'kauansjx31@gmail.com',
     subject: 'Formulário de Contato',
     html: `
       <p><strong>Nome:</strong> ${nome}</p>
