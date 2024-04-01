@@ -1,54 +1,54 @@
-// index.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const nodemailer = require('nodemailer');
 
-import Router from "./router.js"
+const app = express();
+const port = 3000; // ou qualquer porta de sua escolha
 
-const router = new Router()
-router.add("/", "./pages/home.html")
-router.add("/about", "./pages/about.html")
-router.add("/contact", "./pages/contact.html")
-router.add("/contato", "./pages/contato.html")
-router.add(404, "./pages/404.html")
+// Configuração do Body Parser para analisar dados de formulário
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-router.handle()
+// Rota para lidar com o envio do formulário
+app.post('/enviar-email', (req, res) => {
+  const { nome, telefone, email, empresa, mensagem } = req.body;
 
-window.onpopstate = () => router.handle()
-window.route = (event) => router.route(event)
+  // Configuração do Nodemailer
+  const transporter = nodemailer.createTransport({
+    service: 'outlook',
+    auth: {
+      user: 'kauansjx31@outlook.com',
+      pass: 'Montanha12'
+    }
+  });
 
-document.addEventListener("DOMContentLoaded", function () {
-  const sliderImages = document.querySelectorAll(".slider-image")
-  const prevBtn = document.querySelector(".prev-btn")
-  const nextBtn = document.querySelector(".next-btn")
-  let currentIndex = 0
+  // Configuração do e-mail a ser enviado
+  const mailOptions = {
+    from: 'kauansjx31@outlook.com',
+    to: 'email-de-destino@gmail.com',
+    subject: 'Formulário de Contato',
+    html: `
+      <p><strong>Nome:</strong> ${nome}</p>
+      <p><strong>Telefone:</strong> ${telefone}</p>
+      <p><strong>E-mail:</strong> ${email}</p>
+      <p><strong>Empresa:</strong> ${empresa}</p>
+      <p><strong>Mensagem:</strong> ${mensagem}</p>
+    `
+  };
 
-  // Função para mostrar a imagem atual
-  function showCurrentSlide() {
-    sliderImages.forEach((image, index) => {
-      if (index === currentIndex) {
-        image.classList.add("current")
-      } else {
-        image.classList.remove("current")
-      }
-    })
-  }
+  // Envio do e-mail
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+      res.status(500).send('Ocorreu um erro ao enviar o e-mail.');
+    } else {
+      console.log('E-mail enviado: ' + info.response);
+      res.send('E-mail enviado com sucesso!');
+    }
+  });
+});
 
-  // Função para mostrar a próxima imagem
-  function showNextSlide() {
-    currentIndex = (currentIndex + 1) % sliderImages.length
-    showCurrentSlide()
-  }
-
-  // Função para mostrar a imagem anterior
-  function showPrevSlide() {
-    currentIndex =
-      currentIndex === 0 ? sliderImages.length - 1 : currentIndex - 1
-    showCurrentSlide()
-  }
-
-  // Adiciona eventos de clique aos botões de navegação
-  prevBtn.addEventListener("click", showPrevSlide)
-  nextBtn.addEventListener("click", showNextSlide)
-
-  // Mostra a primeira imagem ao carregar a página
-  showCurrentSlide()
-})
-
+// Inicia o servidor
+app.listen(port, () => {
+  console.log(`Servidor iniciado e ouvindo na porta ${port}`);
+});
