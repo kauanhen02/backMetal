@@ -17,14 +17,14 @@ app.post('/enviar-email', (req, res) => {
   const transporter = nodemailer.createTransport({
     service: 'outlook',
     auth: {
-      user: 'kauansjx31@outlook.com',
+      user: 'kauanhen06@putlook.com',
       pass: 'Montanha12'
     }
   });
 
   // Configuração do e-mail a ser enviado
   const mailOptions = {
-    from: 'kauansjx31@outlook.com',
+    from: 'kauanhen06@putlook.com',
     to: 'email-que-deseja-receber-os-formularios@gmail.com',
     subject: 'Formulário de Contato',
     html: `
